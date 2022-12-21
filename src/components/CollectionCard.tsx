@@ -8,7 +8,7 @@ const CollectionCard: React.FC<Collection> = ({ title, profileImage }) => {
     <div className=" my-5 flex h-64 w-80 flex-col rounded-lg shadow-lg">
       <div className="relative h-4/5 w-full overflow-hidden rounded-t-lg">
         <Image
-          className="hover:scale-150"
+          className="duration-500 hover:scale-150"
           loader={() => src}
           src={src}
           alt={`${title}`}

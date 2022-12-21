@@ -18,7 +18,7 @@ const CollectionsPage: NextPage<CollectionsPageProps> = ({ collections }) => {
     (AuctionListing | DirectListing)[] | undefined
   >();
   const { contract } = useContract(
-    "0x6C63679704fbE16BAcDc3CbE130FDB6333b6F02c",
+    "0xee0a43f14299e356d8912373eF3491Ce164f39a9",
     "marketplace"
   );
   React.useEffect(() => {
