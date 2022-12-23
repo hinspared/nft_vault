@@ -2,11 +2,6 @@ import React from "react";
 import { type Collection } from "@prisma/client";
 import { type NextPage } from "next";
 import { prisma } from "../../server/db/client";
-import { useContract } from "@thirdweb-dev/react";
-import {
-  type AuctionListing,
-  type DirectListing,
-} from "@thirdweb-dev/sdk/dist/declarations/src/evm/types";
 import CollectionCard from "../../components/CollectionCard";
 import Link from "next/link";
 
@@ -14,25 +9,6 @@ interface CollectionsPageProps {
   collections: Collection[];
 }
 const CollectionsPage: NextPage<CollectionsPageProps> = ({ collections }) => {
-  const [listings, setListings] = React.useState<
-    (AuctionListing | DirectListing)[] | undefined
-  >();
-  const { contract } = useContract(
-    "0xee0a43f14299e356d8912373eF3491Ce164f39a9",
-    "marketplace"
-  );
-  React.useEffect(() => {
-    const getListings = async () => {
-      const listings = await contract?.getAllListings();
-      setListings(listings);
-    };
-    getListings();
-  }, [contract]);
-  const listing = listings?.findIndex(
-    (el) => el.asset.name === "EQUIPOISE 006"
-  );
-  const names = listings?.map((listing) => listing.asset.name);
-  console.log(collections, names, listing);
   return (
     <>
       <div className="mx-10 my-5 flex ">

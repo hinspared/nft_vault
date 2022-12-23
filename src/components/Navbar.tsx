@@ -10,15 +10,6 @@ import useOutsideClick from "../utils/hooks/clickoutsideComponent";
 
 const navigations = ["Collections", "Stats"];
 const textStyle = `text-2xl font-semibold text-slate-900 hover:text-gray-300 cursor-pointer`;
-// const styles = {
-// container: `flex py-2 px-10 w-full sticky`,
-// text: `text-2xl font-semibold text-black hover:text-gray-300 cursor-pointer`,
-// logoContainer: `flex items-center cursor-pointer gap-5`,
-// searchBarContainer: `flex flex-1 mx-10  items-center bg-[#363840] rounded-[0.8rem] hover:bg-[#4c505c]`,
-// searchIcon: `text-gray-500 mx-3 font-bold text-lg`,
-// searchInput: `h-3 w-full border-0 bg-transparent outline-0  px-2 pl-0 text-gray-300 placeholder:text-[#8a939b]`,
-// navigationsContainer: `flex items-center gap-4`,
-// };
 
 const Navbar = () => {
   const [open, setOpen] = React.useState(false);

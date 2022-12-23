@@ -2,7 +2,6 @@ import React from "react";
 import { useRouter } from "next/router";
 import { type Collection } from "@prisma/client";
 import {
-  ThirdwebSDK,
   type AuctionListing,
   type DirectListing,
   type NFT,
@@ -18,26 +17,51 @@ import {
   useAddress,
   useChainId,
 } from "@thirdweb-dev/react";
+import LoadingSkeleton from "../../../components/collectionPage/LoadingSkeleton";
 
 interface CollectionPageProps {
   collections: Collection[];
-  listings: (AuctionListing | DirectListing)[];
 }
 
-const Collection: NextPage<CollectionPageProps> = ({
-  collections,
-  listings,
-}) => {
+const Collection: NextPage<CollectionPageProps> = ({ collections }) => {
   const router = useRouter();
   const { collectionContractAddress } = router.query;
   const collection = collections.find(
     (collection) => collection.contractAddress === collectionContractAddress
   );
-  // Buying NFT functionality
+  const [isLodaing, setLoading] = React.useState(true);
+  // get All listings of the collection
+  const [listings, setListings] =
+    React.useState<(AuctionListing | DirectListing)[]>();
+
+  const collectionAddress =
+    typeof collectionContractAddress === "string"
+      ? collectionContractAddress
+      : "";
+
+  const { contract: nftCollection } = useContract(
+    collectionAddress,
+    "nft-collection"
+  );
   const { contract: marketplace } = useContract(
     "0xee0a43f14299e356d8912373eF3491Ce164f39a9",
     "marketplace"
   );
+  React.useEffect(() => {
+    const activeListings = async () => {
+      const listings = await marketplace?.getActiveListings();
+      const nfts = await nftCollection?.getAll();
+      const names = nfts?.map((nft: NFT) => nft.metadata.name);
+      const listingsOfCollection = listings?.filter((listing) =>
+        names?.includes(listing.asset.name)
+      );
+      setListings(listingsOfCollection);
+    };
+    activeListings();
+    if (listings !== undefined) setLoading(false);
+  }, [collectionContractAddress, marketplace, nftCollection, listings]);
+
+  // Buying NFT functionality
   const address = useAddress();
   const chain = useChainId();
   const disabled = address !== undefined ? false : true;
@@ -55,53 +79,40 @@ const Collection: NextPage<CollectionPageProps> = ({
       }
     }
   };
+
   return (
     <>
-      <CollectionPage collection={collection} listings={listings} />
-      <div className="flex flex-wrap justify-center gap-10">
-        {React.Children.toArray(
-          listings?.map((listing) => {
-            return (
-              <CardNFT
-                listing={listing}
-                onClick={() => handleClick(listing.asset.id)}
-                disabled={disabled}
-              />
-            );
-          })
-        )}
-      </div>
+      {isLodaing ? (
+        <LoadingSkeleton />
+      ) : (
+        <>
+          <CollectionPage collection={collection} listings={listings} />
+          <div className="flex flex-wrap justify-center gap-10">
+            {React.Children.toArray(
+              listings?.map((listing) => {
+                return (
+                  <CardNFT
+                    listing={listing}
+                    onClick={() => handleClick(listing.asset.id)}
+                    disabled={disabled}
+                  />
+                );
+              })
+            )}
+          </div>
+        </>
+      )}
     </>
   );
 };
 
 export default Collection;
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { collectionContractAddress } = context.query;
+export const getServerSideProps: GetServerSideProps = async () => {
   const collections = await prisma.collection.findMany();
-
-  // Get active listings of the collection
-  const sdk = new ThirdwebSDK("mumbai");
-  const collectionAddress =
-    typeof collectionContractAddress === "string"
-      ? collectionContractAddress
-      : "0x20B0d3D43e69d253b7DE97bC3a55Bc69e663Edef";
-  const marketplace = await sdk.getContract(
-    "0xee0a43f14299e356d8912373eF3491Ce164f39a9",
-    "marketplace"
-  );
-  const collection = await sdk.getContract(collectionAddress, "nft-collection");
-  const NFTs = await collection.getAll();
-  const listings = await marketplace.getActiveListings();
-  const names = NFTs?.map((NFT: NFT) => NFT.metadata.name);
-  const listingsOfCollection = listings?.filter((listing) =>
-    names?.includes(listing.asset.name)
-  );
   return {
     props: {
       collections: JSON.parse(JSON.stringify(collections)),
-      listings: JSON.parse(JSON.stringify(listingsOfCollection)),
     },
   };
 };

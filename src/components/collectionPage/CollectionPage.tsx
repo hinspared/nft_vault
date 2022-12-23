@@ -1,12 +1,12 @@
 import { type Collection } from "@prisma/client";
 import Image from "next/image";
 import React from "react";
-
+import { VscChevronDown, VscChevronUp } from "react-icons/vsc";
 import { type AuctionListing, type DirectListing } from "@thirdweb-dev/sdk";
 
 interface Props {
   collection: Collection | undefined;
-  listings: (AuctionListing | DirectListing)[];
+  listings: (AuctionListing | DirectListing)[] | undefined;
 }
 const styles = {
   text: `font-slate-900 text-m`,
@@ -18,6 +18,14 @@ const CollectionPage: React.FC<Props> = ({ collection, listings }) => {
     collection?.bannerImage !== undefined ? collection?.bannerImage : "";
   const srcForProfileIMG =
     collection?.profileImage !== undefined ? collection?.profileImage : "";
+
+  const [overflow, setOverflow] = React.useState(false);
+  const overflowClass = overflow ? "overflow-visible" : "overflow-hidden h-5";
+  const textOverflow = overflow ? "See less" : "See more";
+  const handleClick = () => {
+    setOverflow((current) => !current);
+  };
+  const Arrow = () => (overflow ? <VscChevronUp /> : <VscChevronDown />);
 
   return (
     <>
@@ -35,17 +43,34 @@ const CollectionPage: React.FC<Props> = ({ collection, listings }) => {
           </div>
         </div>
       </div>
-      <div className="my-20 mx-5 flex flex-col">
+      <div className="my-20 mx-5 flex w-full flex-col">
         <p className="font-slate-900 text-2xl font-bold">{collection?.title}</p>
         <div className="my-5 flex gap-4">
           <p className={styles.text}>
             Items <span className={styles.dataText}>{listings?.length}</span>
           </p>
           <p className={styles.text}>
+            Created at{" "}
+            <span className={styles.dataText}>{listings?.length}</span>
+          </p>
+          <p className={styles.text}>
+            Created fee{" "}
+            <span className={styles.dataText}>{listings?.length}</span>
+          </p>
+          <p className={styles.text}>
             Chain <span className={styles.dataText}>Mumbai</span>
           </p>
         </div>
-        <p className={styles.text}>{collection?.description}</p>
+        <div className={`w-3/5 ${overflowClass}`}>
+          <p className={styles.text}>{collection?.description}</p>
+        </div>
+        <div
+          className="flex cursor-pointer items-center gap-1 hover:text-slate-500"
+          onClick={handleClick}
+        >
+          <p className={styles.text}>{textOverflow}</p>
+          <Arrow />
+        </div>
       </div>
     </>
   );

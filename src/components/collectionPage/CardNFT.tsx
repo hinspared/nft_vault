@@ -3,22 +3,14 @@ import Image from "next/image";
 import React from "react";
 
 interface CardNFTProps {
-  // NFT: NFT;
   listing: DirectListing | AuctionListing | undefined;
   onClick: () => void;
   disabled: boolean;
 }
 
-const CardNFT: React.FC<CardNFTProps> = ({
-  // NFT,
-  listing,
-  onClick,
-  disabled,
-}) => {
-  // const metadata = NFT.metadata;
+const CardNFT: React.FC<CardNFTProps> = ({ listing, onClick, disabled }) => {
   const asset = listing?.asset;
   const src = typeof asset?.image === "string" ? asset?.image : "";
-  // const src = typeof metadata.image === "string" ? metadata.image : " ";
 
   return (
     <div className=" my-5 flex h-64 w-64 flex-col rounded-lg shadow-lg">
