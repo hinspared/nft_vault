@@ -14,12 +14,14 @@ model User {
 }
 
 model Collection {
-  id              String @unique @default(uuid())
-  title           String @unique
-  contractAddress String @unique
+  id              String   @unique @default(uuid())
+  title           String   @unique
+  contractAddress String   @unique
   description     String
-  volumeTraded    Int
-  floorPrice      Int
-  profileImage    String @unique
-  bannerImage     String @unique
+  volumeTraded    Decimal
+  floorPrice      Decimal
+  profileImage    String   @unique
+  bannerImage     String   @unique
+  createdAt       DateTime @default(now())
+  sales           Int
 }

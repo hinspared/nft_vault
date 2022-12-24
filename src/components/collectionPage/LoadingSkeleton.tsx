@@ -3,7 +3,7 @@ import React from "react";
 const LoadingSkeleton = () => {
   return (
     <>
-      <div className="relative my-20 h-80 w-full animate-pulse bg-gray-300">
+      <div className="relative -z-10 my-5 h-80 w-full animate-pulse bg-gray-300">
         <div className="absolute bottom-[-4rem] left-5  flex h-56  w-56 justify-center rounded-xl bg-white">
           <div className="mx-2 my-2 h-[90%] w-[90%] rounded-xl bg-gray-300"></div>
         </div>

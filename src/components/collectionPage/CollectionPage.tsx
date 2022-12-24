@@ -20,17 +20,22 @@ const CollectionPage: React.FC<Props> = ({ collection, listings }) => {
     collection?.profileImage !== undefined ? collection?.profileImage : "";
 
   const [overflow, setOverflow] = React.useState(false);
-  const overflowClass = overflow ? "overflow-visible" : "overflow-hidden h-5";
+  const overflowClass = overflow ? "overflow-visible" : "overflow-hidden h-6";
   const textOverflow = overflow ? "See less" : "See more";
   const handleClick = () => {
     setOverflow((current) => !current);
   };
   const Arrow = () => (overflow ? <VscChevronUp /> : <VscChevronDown />);
-
   return (
     <>
-      <div className="relative my-20 h-80 w-full">
-        <Image alt="background" fill unoptimized src={srcForBackground} />
+      <div className="relative -z-10 my-5 h-80 w-full">
+        <Image
+          alt="background"
+          fill
+          unoptimized
+          src={srcForBackground}
+          className="-z-10"
+        />
         <div className="absolute bottom-[-4rem] left-5 rounded-xl bg-white">
           <div className="relative h-56 w-56 rounded-xl shadow-2xl">
             <Image
@@ -51,11 +56,12 @@ const CollectionPage: React.FC<Props> = ({ collection, listings }) => {
           </p>
           <p className={styles.text}>
             Created at{" "}
-            <span className={styles.dataText}>{listings?.length}</span>
+            <span className={styles.dataText}>
+              {collection?.createdAt?.toLocaleString()?.slice(0, 10)}
+            </span>
           </p>
           <p className={styles.text}>
-            Created fee{" "}
-            <span className={styles.dataText}>{listings?.length}</span>
+            Creator fee <span className={styles.dataText}>5%</span>
           </p>
           <p className={styles.text}>
             Chain <span className={styles.dataText}>Mumbai</span>

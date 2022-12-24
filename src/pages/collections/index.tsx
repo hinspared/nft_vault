@@ -15,7 +15,7 @@ const CollectionsPage: NextPage<CollectionsPageProps> = ({ collections }) => {
         <p className="text-2xl font-bold text-slate-900">Explore collections</p>
       </div>
 
-      <div className="mx-10 my-5 flex justify-center">
+      <div className="mx-10 my-5 flex justify-center gap-10">
         {React.Children.toArray(
           collections.map((collection: Collection) => (
             <Link href={`/collections/${collection.contractAddress}`}>
@@ -28,6 +28,8 @@ const CollectionsPage: NextPage<CollectionsPageProps> = ({ collections }) => {
                 floorPrice={collection.floorPrice}
                 profileImage={collection.profileImage}
                 bannerImage={collection.bannerImage}
+                createdAt={collection.createdAt}
+                sales={collection.sales}
               />
             </Link>
           ))

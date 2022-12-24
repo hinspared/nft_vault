@@ -30,10 +30,10 @@ const Collection: NextPage<CollectionPageProps> = ({ collections }) => {
     (collection) => collection.contractAddress === collectionContractAddress
   );
   const [isLodaing, setLoading] = React.useState(true);
+
   // get All listings of the collection
   const [listings, setListings] =
     React.useState<(AuctionListing | DirectListing)[]>();
-
   const collectionAddress =
     typeof collectionContractAddress === "string"
       ? collectionContractAddress
