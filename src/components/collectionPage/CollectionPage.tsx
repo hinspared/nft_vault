@@ -35,6 +35,7 @@ const CollectionPage: React.FC<Props> = ({ collection, listings }) => {
           unoptimized
           src={srcForBackground}
           className="-z-10"
+          priority
         />
         <div className="absolute bottom-[-4rem] left-5 rounded-xl bg-white">
           <div className="relative h-56 w-56 rounded-xl shadow-2xl">
