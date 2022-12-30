@@ -6,7 +6,7 @@ import {
   type DirectListing,
   type NFT,
 } from "@thirdweb-dev/sdk";
-import { type NextPage, type GetServerSideProps } from "next";
+import { type NextPage } from "next";
 import { prisma } from "../../../server/db/client";
 import CollectionPage from "../../../components/collectionPage/CollectionPage";
 import CardNFT from "../../../components/collectionPage/CardNFT";
@@ -29,7 +29,7 @@ const Collection: NextPage<CollectionPageProps> = ({ collections }) => {
   const collection = collections.find(
     (collection) => collection.contractAddress === collectionContractAddress
   );
-  const [isLodaing, setLoading] = React.useState(true);
+  const [isLoading, setLoading] = React.useState(true);
 
   // get All listings of the collection
   const [listings, setListings] =
@@ -48,6 +48,15 @@ const Collection: NextPage<CollectionPageProps> = ({ collections }) => {
     "marketplace"
   );
   React.useEffect(() => {
+    if (Object.keys(sessionStorage).includes(`${collectionAddress}`)) {
+      setListings(
+        JSON.parse(sessionStorage.getItem(`${collectionAddress}`) || "{}")
+      );
+      setLoading(false);
+    }
+  }, [collectionAddress]);
+
+  React.useMemo(() => {
     const activeListings = async () => {
       const listings = await marketplace?.getActiveListings();
       const nfts = await nftCollection?.getAll();
@@ -57,9 +66,13 @@ const Collection: NextPage<CollectionPageProps> = ({ collections }) => {
       );
       setListings(listingsOfCollection);
     };
-    activeListings();
-    if (listings !== undefined) setLoading(false);
-  }, [collectionContractAddress, marketplace, nftCollection, listings]);
+    if (listings !== undefined) {
+      setLoading(false);
+      sessionStorage.setItem(`${collectionAddress}`, JSON.stringify(listings));
+    } else {
+      activeListings();
+    }
+  }, [collectionAddress, listings, marketplace, nftCollection]);
 
   // Buying NFT functionality
   const address = useAddress();
@@ -71,6 +84,7 @@ const Collection: NextPage<CollectionPageProps> = ({ collections }) => {
       chain === 80001
         ? await marketplace?.buyoutListing(listingId, quantityDesired)
         : switchNetwork?.(ChainId.Mumbai);
+      setListings(undefined);
     } catch (e) {
       if (typeof e === "string") {
         e.toUpperCase();
@@ -82,7 +96,7 @@ const Collection: NextPage<CollectionPageProps> = ({ collections }) => {
 
   return (
     <>
-      {isLodaing ? (
+      {isLoading ? (
         <LoadingSkeleton />
       ) : (
         <>
@@ -108,7 +122,7 @@ const Collection: NextPage<CollectionPageProps> = ({ collections }) => {
 
 export default Collection;
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps = async () => {
   const collections = await prisma.collection.findMany();
   return {
     props: {

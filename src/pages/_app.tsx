@@ -1,6 +1,6 @@
 import { type AppType } from "next/app";
 import "../styles/globals.css";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/navbar/Navbar";
 import { ThirdwebProvider, ChainId } from "@thirdweb-dev/react";
 import { Poppins } from "@next/font/google";
 

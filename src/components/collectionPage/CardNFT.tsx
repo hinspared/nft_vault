@@ -38,11 +38,7 @@ const CardNFT: React.FC<CardNFTProps> = ({ listing, onClick, disabled }) => {
       </div>
       <div className={buttonStyle} onClick={onClick}>
         <BsLightningChargeFill className={lightningStyle} />
-        <button
-          className="p-2 text-gray-50"
-          // onClick={onClick}
-          disabled={disabled}
-        >
+        <button className="p-2 text-gray-50" disabled={disabled}>
           Buy now
         </button>
       </div>
