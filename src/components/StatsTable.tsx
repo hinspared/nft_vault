@@ -1,13 +1,32 @@
 import { type Collection } from "@prisma/client";
 import Image from "next/image";
 import React from "react";
+import {
+  TiArrowSortedDown,
+  TiArrowSortedUp,
+  TiArrowUnsorted,
+} from "react-icons/ti";
 
 interface StatsTableProps {
   collections: Collection[];
   active: string;
   onClick: (e: React.MouseEvent) => void;
 }
+
+interface ArrowProps {
+  active: boolean;
+  direction: string;
+}
 const stats = ["VOLUME", "FLOOR PRICE", "SALES"];
+
+const Arrow: React.FC<ArrowProps> = ({ active, direction }) =>
+  !active ? (
+    <TiArrowUnsorted className="text-slate-600" />
+  ) : direction === "UP" ? (
+    <TiArrowSortedDown />
+  ) : (
+    <TiArrowSortedUp />
+  );
 
 const StatsTable: React.FC<StatsTableProps> = ({
   collections,
@@ -24,14 +43,24 @@ const StatsTable: React.FC<StatsTableProps> = ({
         {React.Children.toArray(
           stats.map((stat) => (
             <div className="flex justify-end">
-              <p
-                className={`cursor-pointer text-${
-                  active.includes(stat) ? "zinc-900 font-semibold" : "slate-600"
-                }`}
+              <div
+                className="flex cursor-pointer items-center"
                 onClick={onClick}
               >
-                {stat}
-              </p>
+                <p
+                  className={`text-${
+                    active.includes(stat)
+                      ? "zinc-900 font-semibold"
+                      : "slate-600"
+                  }`}
+                >
+                  {stat}
+                </p>
+                <Arrow
+                  active={active.includes(stat)}
+                  direction={active.slice(-2)}
+                />
+              </div>
             </div>
           ))
         )}
@@ -44,7 +73,6 @@ const StatsTable: React.FC<StatsTableProps> = ({
                 </div>
                 <Image
                   src={collection.profileImage}
-                  loader={() => collection.profileImage}
                   width={60}
                   height={60}
                   alt={collection.title}

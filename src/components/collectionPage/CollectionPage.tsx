@@ -45,6 +45,7 @@ const CollectionPage: React.FC<Props> = ({ collection, listings }) => {
               unoptimized
               src={srcForProfileIMG}
               className="rounded-xl p-2"
+              priority
             />
           </div>
         </div>

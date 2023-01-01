@@ -13,5 +13,8 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
+  images: {
+    domains: ["i.seadn.io", "gateway.ipfscdn.io"],
+  },
 };
 export default config;

@@ -22,11 +22,9 @@ const CardNFT: React.FC<CardNFTProps> = ({ listing, onClick, disabled }) => {
       <div className="relative h-4/5 w-full overflow-hidden rounded-t-lg">
         <Image
           className="duration-500 hover:scale-125"
-          loader={() => src}
           src={src}
           alt={`${asset?.name}`}
           fill
-          unoptimized
         />
       </div>
       <div className="my-5 mx-3 flex flex-col">
