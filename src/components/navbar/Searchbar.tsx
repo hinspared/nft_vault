@@ -44,7 +44,7 @@ export const Searchbar = () => {
       <input
         type="search"
         className="h-5 w-full border-0 bg-transparent px-2  pl-0 text-gray-300 outline-0 placeholder:text-[#8a939b]"
-        placeholder="Search items, collections, and accounts"
+        placeholder="Search collections"
         onChange={handleChange}
         onFocus={() => setResultOpen(true)}
       />

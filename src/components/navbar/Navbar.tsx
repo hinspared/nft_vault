@@ -2,14 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import logo from "../../../public/opensealogo.png";
-import { AiOutlineShoppingCart, AiOutlineClose } from "react-icons/ai";
-import { BiUserCircle } from "react-icons/bi";
-import { IoMdWallet } from "react-icons/io";
-import { ConnectWallet } from "@thirdweb-dev/react";
-import useOutsideClick from "../../utils/hooks/clickoutsideComponent";
+import { AiOutlineClose } from "react-icons/ai";
 import { Searchbar } from "./Searchbar";
+import NavigationComponent from "./NavigationComponent";
 
-const navigations = ["Collections", "Stats"];
 const textStyle = `text-2xl font-semibold text-slate-900 hover:text-gray-300 cursor-pointer`;
 
 const Navbar = () => {
@@ -21,7 +17,7 @@ const Navbar = () => {
     setOpen(false);
   };
   const [close, setClose] = React.useState(false);
-  const ref = useOutsideClick(handleClose);
+
   const handleClickClose = () => {
     setClose(true);
     sessionStorage.setItem("close", "true");
@@ -40,27 +36,11 @@ const Navbar = () => {
           </div>
         </Link>
         <Searchbar />
-        <div className="flex items-center gap-4">
-          {React.Children.toArray(
-            navigations.map((navigation) => (
-              <Link href={`/${navigation.toLowerCase()}`}>
-                <p className={textStyle}>{navigation}</p>
-              </Link>
-            ))
-          )}
-          <BiUserCircle className={textStyle} />
-          <div className="relative" ref={ref}>
-            <IoMdWallet className={textStyle} onClick={handleClick} />
-            <div
-              className={`absolute left-[-7rem] top-[2.7rem] ${
-                open ? "" : "hidden"
-              }`}
-            >
-              <ConnectWallet />
-            </div>
-          </div>
-          <AiOutlineShoppingCart className={textStyle} />
-        </div>
+        <NavigationComponent
+          open={open}
+          onClick={handleClick}
+          onClose={handleClose}
+        />
       </div>
       <div
         className={`${

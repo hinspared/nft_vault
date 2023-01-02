@@ -27,12 +27,12 @@ jobs:
       - name: Prisma
         run: npx prisma generate
       - name: Dev server
+        run: npm run dev
         env:
           DATABASE_URL: ${{secrets.DATABASE_URL}}
-        run: npm run dev
       - name: Linting
         run: npm run lint
       - name: Production server
+        run: npm run start
         env:
           DATABASE_URL: ${{secrets.DATABASE_URL}}
-        run: npm run start
