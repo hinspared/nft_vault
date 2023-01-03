@@ -17,7 +17,6 @@ interface ArrowProps {
   active: boolean;
   direction: string;
 }
-const stats = ["VOLUME", "FLOOR PRICE", "SALES"];
 
 const Arrow: React.FC<ArrowProps> = ({ active, direction }) =>
   !active ? (
@@ -33,16 +32,27 @@ const StatsTable: React.FC<StatsTableProps> = ({
   active,
   onClick,
 }) => {
+  const [media, setMedia] = React.useState(true);
+  const stats = ["VOLUME", "FLOOR PRICE", "SALES"];
+
+  React.useEffect(() => {
+    const match = window.matchMedia("(min-width: 768px)").matches;
+    setMedia(match);
+  }, []);
   return (
     <>
       <div className="mx-10 my-20 flex ">
         <p className="text-4xl font-bold text-slate-900">Collection stats</p>
       </div>
-      <div className="mx-auto grid w-4/5 grid-cols-5 items-center gap-y-10">
+      <div className="mx-auto grid w-4/5 grid-cols-3 items-center gap-y-10 md:grid-cols-5">
         <p className="col-span-2 ml-20 text-slate-600">COLLECTION</p>
         {React.Children.toArray(
           stats.map((stat) => (
-            <div className="flex justify-end">
+            <div
+              className={`${
+                media || stat === "VOLUME" ? "" : "hidden"
+              } flex justify-end`}
+            >
               <div
                 className="flex cursor-pointer items-center"
                 onClick={onClick}
@@ -85,12 +95,12 @@ const StatsTable: React.FC<StatsTableProps> = ({
                   {Number(collection.volumeTraded)} MATIC
                 </p>
               </div>
-              <div className="flex justify-end">
+              <div className={`${media ? "" : "hidden"} flex justify-end`}>
                 <p className="text-slate-900">
                   {Number(collection.floorPrice)} MATIC
                 </p>
               </div>
-              <div className="flex justify-end">
+              <div className={`${media ? "" : "hidden"} flex justify-end`}>
                 <p className="text-slate-900">{collection.sales}</p>
               </div>
             </>

@@ -2,13 +2,22 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import logo from "../../../public/opensealogo.png";
-import { AiOutlineClose } from "react-icons/ai";
-import { Searchbar } from "./Searchbar";
-import NavigationComponent from "./NavigationComponent";
+import { AiOutlineClose, AiOutlineMenu, AiOutlineSearch } from "react-icons/ai";
+import Searchbar from "./components/Searchbar";
+import NavigationComponent from "./components/NavigationComponent";
+import DialogMobile from "./mobile/DialogMobile";
 
-const textStyle = `text-2xl font-semibold text-slate-900 hover:text-gray-300 cursor-pointer`;
+const textStyle = `text-sm lg:text-2xl font-semibold text-slate-900 hover:text-gray-300 cursor-pointer`;
+const navigations = ["Collections", "Stats"];
 
 const Navbar = () => {
+  const [media, setMedia] = React.useState(true);
+
+  React.useEffect(() => {
+    const match = window.matchMedia("(min-width: 768px)").matches;
+    setMedia(match);
+  }, []);
+
   const [open, setOpen] = React.useState(false);
   const handleClick = () => {
     setOpen(true);
@@ -16,8 +25,9 @@ const Navbar = () => {
   const handleClose = () => {
     setOpen(false);
   };
-  const [close, setClose] = React.useState(false);
 
+  // Warning to connect Metamask and connect to Mumbai network
+  const [close, setClose] = React.useState(false);
   const handleClickClose = () => {
     setClose(true);
     sessionStorage.setItem("close", "true");
@@ -26,21 +36,61 @@ const Navbar = () => {
     if (sessionStorage.getItem("close")) setClose(true);
   }, []);
 
+  // Mobile version
+  const [openMobile, setOpenMobile] = React.useState(false);
+  const handleClickMobile = () => {
+    setOpenMobile(true);
+  };
+  const handleMobileClose = () => {
+    setOpenMobile(false);
+  };
+  const [menuOpen, setMenuOpen] = React.useState(false);
+  const handleClickMenu = () => {
+    setMenuOpen((current) => !current);
+  };
+
+  const Menu = () =>
+    menuOpen ? (
+      <AiOutlineClose className="text-2xl" onClick={handleClickMenu} />
+    ) : (
+      <AiOutlineMenu className="text-2xl" onClick={handleClickMenu} />
+    );
+
   return (
     <div className="sticky top-0 z-10">
-      <div className="flex w-full bg-white py-2 px-10 shadow-lg">
+      <Searchbar mobile open={openMobile} onClick={handleMobileClose} />
+      <div className="relative flex w-full items-center gap-2 bg-white py-2 px-10 shadow-lg">
         <Link href="/">
           <div className="flex cursor-pointer items-center gap-5">
             <Image src={logo} alt="logo" width={40} height={40} />
             <p className={textStyle}>OpenSea</p>
           </div>
         </Link>
-        <Searchbar />
-        <NavigationComponent
-          open={open}
-          onClick={handleClick}
-          onClose={handleClose}
-        />
+        {media === false ? (
+          <>
+            <AiOutlineSearch
+              className="ml-auto text-2xl"
+              onClick={handleClickMobile}
+            />
+            <Menu />
+            <DialogMobile
+              open={menuOpen}
+              onClick={handleClickMenu}
+              onClose={handleClickMenu}
+              navigations={navigations}
+            />
+          </>
+        ) : (
+          <>
+            <Searchbar />
+            <NavigationComponent
+              open={open}
+              onClick={handleClick}
+              onClose={handleClose}
+              navigations={navigations}
+            />
+          </>
+        )}
       </div>
       <div
         className={`${

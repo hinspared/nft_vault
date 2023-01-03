@@ -2,20 +2,21 @@ import Link from "next/link";
 import React from "react";
 import { IoMdWallet } from "react-icons/io";
 import { ConnectWallet } from "@thirdweb-dev/react";
-import useOutsideClick from "../../utils/hooks/clickoutsideComponent";
+import useOutsideClick from "../../../utils/hooks/clickoutsideComponent";
 
 interface NavigationProps {
   open: boolean;
   onClick: () => void;
   onClose: () => void;
+  navigations: string[];
 }
-const navigations = ["Collections", "Stats"];
-const textStyle = `text-2xl font-semibold text-slate-900 hover:text-gray-300 cursor-pointer`;
+const textStyle = `text-sm md:text-2xl font-semibold text-slate-900 hover:text-gray-300 cursor-pointer`;
 
 const NavigationComponent: React.FC<NavigationProps> = ({
   open = false,
   onClick,
   onClose,
+  navigations,
 }) => {
   const ref = useOutsideClick(onClose);
 

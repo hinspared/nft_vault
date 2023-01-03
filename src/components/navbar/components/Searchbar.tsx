@@ -1,16 +1,29 @@
 import Link from "next/link";
 import React from "react";
 import { AiOutlineSearch } from "react-icons/ai";
-import useOutsideClick from "../../utils/hooks/clickoutsideComponent";
+import useOutsideClick from "../../../utils/hooks/clickoutsideComponent";
+import { MdKeyboardArrowRight } from "react-icons/md";
 
 const escapeRegExp = (str: string) => {
   return str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 };
 
-export const Searchbar = () => {
+interface SearchBarProps {
+  mobile?: boolean;
+  open?: boolean;
+  onClick?: () => void;
+}
+
+const Searchbar: React.FC<SearchBarProps> = ({
+  mobile = false,
+  open = true,
+  onClick,
+}) => {
   const [searchInput, setSearchInput] = React.useState("");
   const [resultOpen, setResultOpen] = React.useState(false);
-  const handleCloseResult = () => setResultOpen(false);
+  const handleCloseResult = () => {
+    setResultOpen(false);
+  };
 
   const ref = useOutsideClick(handleCloseResult);
 
@@ -39,11 +52,21 @@ export const Searchbar = () => {
   };
 
   return (
-    <div className="relative mx-10 flex flex-1 items-center gap-10 rounded-[0.8rem] bg-[#363840]">
-      <AiOutlineSearch className="mx-3 text-lg font-bold text-gray-500" />
+    <div
+      className={`${mobile ? "absolute z-30 h-14 w-full" : "relative"} ${
+        open ? "" : "hidden"
+      } flex flex-1 items-center rounded-xl bg-white`}
+    >
+      <div className="ml-5 flex h-full items-center" onClick={onClick}>
+        <MdKeyboardArrowRight
+          className={`${mobile ? "" : "hidden"} text-2xl text-gray-500`}
+        />
+      </div>
+
+      <AiOutlineSearch className="text-lg font-bold text-gray-500" />
       <input
         type="search"
-        className="h-5 w-full border-0 bg-transparent px-2  pl-0 text-gray-300 outline-0 placeholder:text-[#8a939b]"
+        className="h-5 w-full border-0 bg-transparent px-2  pl-0 text-slate-900 outline-0 placeholder:text-[#8a939b]"
         placeholder="Search collections"
         onChange={handleChange}
         onFocus={() => setResultOpen(true)}
@@ -59,6 +82,7 @@ export const Searchbar = () => {
             <Link
               href={`/collections/${collection.address}`}
               className="py-2 pl-10 [&:not(:last-child)]:border-b-2 [&:not(:last-child)]:border-slate-500"
+              onClick={handleCloseResult}
             >
               <p className="">{collection.name}</p>
             </Link>
@@ -68,3 +92,5 @@ export const Searchbar = () => {
     </div>
   );
 };
+
+export default Searchbar;

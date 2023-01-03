@@ -9,8 +9,8 @@ interface Props {
   listings: (AuctionListing | DirectListing)[] | undefined;
 }
 const styles = {
-  text: `font-slate-900 text-m`,
-  dataText: `font-slate-900 text-m font-bold`,
+  text: `font-slate-900 md:text-m text-sm`,
+  dataText: `font-slate-900 text-sm md:text-m font-bold`,
 };
 
 const CollectionPage: React.FC<Props> = ({ collection, listings }) => {
@@ -28,7 +28,7 @@ const CollectionPage: React.FC<Props> = ({ collection, listings }) => {
   const Arrow = () => (overflow ? <VscChevronUp /> : <VscChevronDown />);
   return (
     <>
-      <div className="relative -z-10 my-5 h-80 w-full">
+      <div className="relative -z-10 my-5 h-56 w-full md:h-80">
         <Image
           alt="background"
           fill
@@ -38,7 +38,7 @@ const CollectionPage: React.FC<Props> = ({ collection, listings }) => {
           priority
         />
         <div className="absolute bottom-[-4rem] left-5 rounded-xl bg-white">
-          <div className="relative h-56 w-56 rounded-xl shadow-2xl">
+          <div className="relative h-36 w-36 rounded-xl shadow-2xl md:h-56 md:w-56">
             <Image
               alt="background"
               fill
@@ -50,8 +50,10 @@ const CollectionPage: React.FC<Props> = ({ collection, listings }) => {
           </div>
         </div>
       </div>
-      <div className="my-20 mx-5 flex w-full flex-col">
-        <p className="font-slate-900 text-2xl font-bold">{collection?.title}</p>
+      <div className="my-20 flex w-full flex-col px-5">
+        <p className="font-slate-900 text-m font-bold md:text-2xl">
+          {collection?.title}
+        </p>
         <div className="my-5 flex gap-4">
           <p className={styles.text}>
             Items <span className={styles.dataText}>{listings?.length}</span>
@@ -69,7 +71,7 @@ const CollectionPage: React.FC<Props> = ({ collection, listings }) => {
             Chain <span className={styles.dataText}>Mumbai</span>
           </p>
         </div>
-        <div className={`w-3/5 ${overflowClass}`}>
+        <div className={`md:w-3/5 ${overflowClass}`}>
           <p className={styles.text}>{collection?.description}</p>
         </div>
         <div

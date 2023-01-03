@@ -18,7 +18,7 @@ const CardNFT: React.FC<CardNFTProps> = ({ listing, onClick, disabled }) => {
   const lightningStyle = `text-gray-50 ${disabled ? "hidden" : ""}`;
 
   return (
-    <div className="my-5 flex h-96 w-72 flex-col rounded-lg shadow-lg">
+    <div className="my-5 flex h-72 w-52 flex-col rounded-lg shadow-lg md:h-96 md:w-72">
       <div className="relative h-4/5 w-full overflow-hidden rounded-t-lg">
         <Image
           className="duration-500 hover:scale-125"
