@@ -8,7 +8,8 @@ import NavigationComponent from "./components/NavigationComponent";
 import DialogMobile from "./mobile/DialogMobile";
 
 const textStyle = `text-sm lg:text-2xl font-semibold text-slate-900 hover:text-gray-300 cursor-pointer`;
-const navigations = ["Collections", "Stats"];
+
+const navigations = ["collections", "stats"];
 
 const Navbar = () => {
   const [media, setMedia] = React.useState(true);
@@ -20,7 +21,7 @@ const Navbar = () => {
 
   const [open, setOpen] = React.useState(false);
   const handleClick = () => {
-    setOpen(true);
+    setOpen((current) => !current);
   };
   const handleClose = () => {
     setOpen(false);
@@ -37,12 +38,12 @@ const Navbar = () => {
   }, []);
 
   // Mobile version
-  const [openMobile, setOpenMobile] = React.useState(false);
+  const [openSearchBarM, setOpenSearchBarM] = React.useState(false);
   const handleClickMobile = () => {
-    setOpenMobile(true);
+    setOpenSearchBarM(true);
   };
   const handleMobileClose = () => {
-    setOpenMobile(false);
+    setOpenSearchBarM(false);
   };
   const [menuOpen, setMenuOpen] = React.useState(false);
   const handleClickMenu = () => {
@@ -58,8 +59,8 @@ const Navbar = () => {
 
   return (
     <div className="sticky top-0 z-10">
-      <Searchbar mobile open={openMobile} onClick={handleMobileClose} />
-      <div className="relative flex w-full items-center gap-2 bg-white py-2 px-10 shadow-lg">
+      <Searchbar mobile open={openSearchBarM} onClick={handleMobileClose} />
+      <div className="relative flex w-full items-center gap-2 bg-white py-2 px-5 shadow-lg">
         <Link href="/">
           <div className="flex cursor-pointer items-center gap-5">
             <Image src={logo} alt="logo" width={40} height={40} />
@@ -75,7 +76,7 @@ const Navbar = () => {
             <Menu />
             <DialogMobile
               open={menuOpen}
-              onClick={handleClickMenu}
+              onClick={handleMobileClose}
               onClose={handleClickMenu}
               navigations={navigations}
             />

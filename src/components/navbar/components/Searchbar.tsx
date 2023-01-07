@@ -3,6 +3,8 @@ import React from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import useOutsideClick from "../../../utils/hooks/clickoutsideComponent";
 import { MdKeyboardArrowRight } from "react-icons/md";
+import useSWR from "swr";
+import { type Collection } from "@prisma/client";
 
 const escapeRegExp = (str: string) => {
   return str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
@@ -13,6 +15,7 @@ interface SearchBarProps {
   open?: boolean;
   onClick?: () => void;
 }
+const fetcher = (resource: string) => fetch(resource).then((res) => res.json());
 
 const Searchbar: React.FC<SearchBarProps> = ({
   mobile = false,
@@ -27,21 +30,14 @@ const Searchbar: React.FC<SearchBarProps> = ({
 
   const ref = useOutsideClick(handleCloseResult);
 
-  const collections = [
-    {
-      name: "equipoise",
-      address: "0x20B0d3D43e69d253b7DE97bC3a55Bc69e663Edef",
-    },
-    {
-      name: "rtfkt x rimowa meta-artisan collection",
-      address: "0x47893ab13E27CdAB213C12623A2CbF4409b7465a",
-    },
-  ];
+  const { data: collections } = useSWR("/api/collections", fetcher);
 
-  const foundCollections =
+  const foundCollections: Collection[] =
     searchInput.length > 0
-      ? collections.filter((collection) =>
-          collection.name.match(escapeRegExp(searchInput.toLowerCase()))
+      ? collections.filter((collection: Collection) =>
+          collection.title
+            .toLowerCase()
+            .match(escapeRegExp(searchInput.toLowerCase()))
         )
       : [];
 
@@ -62,15 +58,17 @@ const Searchbar: React.FC<SearchBarProps> = ({
           className={`${mobile ? "" : "hidden"} text-2xl text-gray-500`}
         />
       </div>
+      <div className="flex w-full items-center rounded-xl border-2 border-slate-400 px-3">
+        <AiOutlineSearch className="text-lg font-bold text-gray-500" />
+        <input
+          type="search"
+          className="h-10 w-full border-0 border-transparent px-2 pl-1 pl-0 text-slate-900 outline-0 placeholder:text-[#8a939b]"
+          placeholder="Search collections"
+          onChange={handleChange}
+          onFocus={() => setResultOpen(true)}
+        />
+      </div>
 
-      <AiOutlineSearch className="text-lg font-bold text-gray-500" />
-      <input
-        type="search"
-        className="h-5 w-full border-0 bg-transparent px-2  pl-0 text-slate-900 outline-0 placeholder:text-[#8a939b]"
-        placeholder="Search collections"
-        onChange={handleChange}
-        onFocus={() => setResultOpen(true)}
-      />
       <div
         className={`${
           resultOpen ? "absolute top-14" : "hidden"
@@ -80,11 +78,11 @@ const Searchbar: React.FC<SearchBarProps> = ({
         {React.Children.toArray(
           foundCollections.map((collection) => (
             <Link
-              href={`/collections/${collection.address}`}
+              href={`/collections/${collection.contractAddress}`}
               className="py-2 pl-10 [&:not(:last-child)]:border-b-2 [&:not(:last-child)]:border-slate-500"
               onClick={handleCloseResult}
             >
-              <p className="">{collection.name}</p>
+              <p className="">{collection.title}</p>
             </Link>
           ))
         )}

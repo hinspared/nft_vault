@@ -13,18 +13,18 @@ const MainPageComponent = () => {
       >
         <div className="relative flex h-[90vh] flex-col items-center justify-center">
           <div className="relative mb-10 w-3/5 text-center text-2xl font-semibold text-white md:text-5xl">
-            Discover, collect, and sell extraordinary NFTs
+            Discover, collect and sell extraordinary NFTs
           </div>
-          <div className="flex">
+          <div className="flex gap-5">
             <Link href="/collections">
-              <button className="relative mr-5 cursor-pointer rounded-lg bg-sky-600 px-12 py-4 text-lg font-semibold text-white hover:bg-sky-500">
+              <button className="relative cursor-pointer rounded-lg bg-sky-600 px-12 py-4 text-lg font-semibold text-white hover:bg-sky-500">
                 Explore
               </button>
             </Link>
             <button
               className={`${
                 address ? "hidden" : "relative"
-              } mr-5 cursor-pointer rounded-lg bg-[#363840] px-12 py-4 text-lg font-semibold text-[#e4e8ea] hover:bg-[#4c505c]`}
+              } cursor-pointer rounded-lg bg-[#363840] px-12 py-4 text-lg font-semibold text-[#e4e8ea] hover:bg-[#4c505c]`}
               onClick={connectWithMetamask}
             >
               Connect

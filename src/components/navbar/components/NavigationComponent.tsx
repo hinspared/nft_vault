@@ -21,10 +21,10 @@ const NavigationComponent: React.FC<NavigationProps> = ({
   const ref = useOutsideClick(onClose);
 
   return (
-    <div className="flex items-center gap-4">
+    <div className="z-30 flex items-center gap-4">
       {React.Children.toArray(
         navigations.map((navigation) => (
-          <Link href={`/${navigation.toLowerCase()}`}>
+          <Link href={`/${navigation}`}>
             <p className={textStyle}>{navigation}</p>
           </Link>
         ))
@@ -32,7 +32,7 @@ const NavigationComponent: React.FC<NavigationProps> = ({
       <div className="relative" ref={ref}>
         <IoMdWallet className={textStyle} onClick={onClick} />
         <div
-          className={`absolute left-[-7rem] top-[2.7rem] ${
+          className={`absolute left-[-10rem] top-[2.7rem] ${
             open ? "" : "hidden"
           }`}
         >

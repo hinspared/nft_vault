@@ -37,7 +37,7 @@ const Collection: NextPage<CollectionPageProps> = ({ collections }) => {
   const collectionAddress =
     typeof collectionContractAddress === "string"
       ? collectionContractAddress
-      : "";
+      : "wrong";
 
   const { contract: nftCollection } = useContract(
     collectionAddress,
@@ -65,10 +65,14 @@ const Collection: NextPage<CollectionPageProps> = ({ collections }) => {
         names?.includes(listing.asset.name)
       );
       setListings(listingsOfCollection);
+      if (listings !== undefined)
+        return sessionStorage.setItem(
+          `${collectionAddress}`,
+          JSON.stringify(listingsOfCollection)
+        );
     };
     if (listings !== undefined) {
       setLoading(false);
-      sessionStorage.setItem(`${collectionAddress}`, JSON.stringify(listings));
     } else {
       activeListings();
     }
@@ -86,10 +90,8 @@ const Collection: NextPage<CollectionPageProps> = ({ collections }) => {
         : switchNetwork?.(ChainId.Mumbai);
       setListings(undefined);
     } catch (e) {
-      if (typeof e === "string") {
-        e.toUpperCase();
-      } else if (e instanceof Error) {
-        alert(e.message);
+      if (e instanceof Error) {
+        console.log(e.message);
       }
     }
   };

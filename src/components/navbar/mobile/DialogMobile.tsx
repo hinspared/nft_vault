@@ -38,18 +38,21 @@ const DialogMobile: React.FC<DialogProps> = ({
     >
       <Dialog
         onClose={onClose}
+        open={open}
         className="absolute bottom-[-3rem] z-30 h-full w-full bg-white"
       >
         <Dialog.Panel className="h-full">
           <div className="mt-10 flex flex-col justify-center gap-10 p-5">
             {React.Children.toArray(
               navigations.map((navigation) => (
-                <Link href={`/${navigation.toLowerCase()}`} onClick={onClick}>
+                <Link
+                  href={`/${navigation}`}
+                  onClick={onClick}
+                  className="focus:outline-0"
+                >
                   <div className="flex items-center gap-3">
                     <StatIcon navigation={navigation} />
-                    <p className="cursor-pointer text-2xl text-slate-900 hover:text-gray-300">
-                      {navigation}
-                    </p>
+                    <p className="text-2xl text-slate-900 ">{navigation}</p>
                     <MdKeyboardArrowRight className="ml-auto" />
                   </div>
                 </Link>

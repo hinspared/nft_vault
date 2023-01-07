@@ -2,7 +2,7 @@ import React from "react";
 import { type Collection } from "@prisma/client";
 import { type NextPage } from "next";
 import { prisma } from "../../server/db/client";
-import CollectionCard from "../../components/CollectionCard";
+import CollectionCard from "../../components/collectionPage/CollectionCard";
 import Link from "next/link";
 
 interface CollectionsPageProps {
