@@ -15,7 +15,7 @@ const CollectionsPage: NextPage<CollectionsPageProps> = ({ collections }) => {
         <p className="text-4xl font-bold text-slate-900">Explore collections</p>
       </div>
 
-      <div className="my-5 flex justify-center gap-10 px-10">
+      <div className="my-5 flex flex-wrap justify-center gap-10 px-10">
         {React.Children.toArray(
           collections.map((collection: Collection) => (
             <Link href={`/collections/${collection.contractAddress}`}>

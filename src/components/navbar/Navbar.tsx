@@ -76,7 +76,7 @@ const Navbar = () => {
             <Menu />
             <DialogMobile
               open={menuOpen}
-              onClick={handleMobileClose}
+              onClick={handleClickMenu}
               onClose={handleClickMenu}
               navigations={navigations}
             />

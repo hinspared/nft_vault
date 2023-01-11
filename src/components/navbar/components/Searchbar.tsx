@@ -27,7 +27,6 @@ const Searchbar: React.FC<SearchBarProps> = ({
   const handleCloseResult = () => {
     setResultOpen(false);
   };
-
   const ref = useOutsideClick(handleCloseResult);
 
   const { data: collections } = useSWR("/api/collections", fetcher);

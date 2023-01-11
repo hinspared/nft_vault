@@ -29,15 +29,25 @@ const Collection: NextPage<CollectionPageProps> = ({ collections }) => {
   const collection = collections.find(
     (collection) => collection.contractAddress === collectionContractAddress
   );
-  const [isLoading, setLoading] = React.useState(true);
-
-  // get All listings of the collection
-  const [listings, setListings] =
-    React.useState<(AuctionListing | DirectListing)[]>();
   const collectionAddress =
     typeof collectionContractAddress === "string"
       ? collectionContractAddress
       : "wrong";
+  const [isLoading, setLoading] = React.useState(true);
+  const sale = async (volume: number) => {
+    const data = {
+      id: collectionContractAddress,
+      volume: volume,
+    };
+    await fetch("/api/sale", {
+      method: "put",
+      body: JSON.stringify(data),
+    });
+  };
+
+  // get All listings of the collection
+  const [listings, setListings] =
+    React.useState<(AuctionListing | DirectListing)[]>();
 
   const { contract: nftCollection } = useContract(
     collectionAddress,
@@ -47,27 +57,33 @@ const Collection: NextPage<CollectionPageProps> = ({ collections }) => {
     "0xee0a43f14299e356d8912373eF3491Ce164f39a9",
     "marketplace"
   );
+
   React.useEffect(() => {
-    if (Object.keys(sessionStorage).includes(`${collectionAddress}`)) {
+    if (Object.keys(sessionStorage).includes(`${collectionContractAddress}`)) {
       setListings(
-        JSON.parse(sessionStorage.getItem(`${collectionAddress}`) || "{}")
+        JSON.parse(
+          sessionStorage.getItem(`${collectionContractAddress}`) || "{}"
+        )
       );
       setLoading(false);
+    } else {
+      setListings(undefined);
     }
-  }, [collectionAddress]);
+  }, [collectionContractAddress]);
 
   React.useMemo(() => {
     const activeListings = async () => {
-      const listings = await marketplace?.getActiveListings();
+      const listings = await marketplace?.getAllListings();
+      const activeListings = await marketplace?.getActiveListings();
       const nfts = await nftCollection?.getAll();
       const names = nfts?.map((nft: NFT) => nft.metadata.name);
-      const listingsOfCollection = listings?.filter((listing) =>
+      const listingsOfCollection = activeListings?.filter((listing) =>
         names?.includes(listing.asset.name)
       );
       setListings(listingsOfCollection);
       if (listings !== undefined)
         return sessionStorage.setItem(
-          `${collectionAddress}`,
+          `${collectionContractAddress}`,
           JSON.stringify(listingsOfCollection)
         );
     };
@@ -76,19 +92,25 @@ const Collection: NextPage<CollectionPageProps> = ({ collections }) => {
     } else {
       activeListings();
     }
-  }, [collectionAddress, listings, marketplace, nftCollection]);
+  }, [collectionContractAddress, listings, marketplace, nftCollection]);
 
   // Buying NFT functionality
   const address = useAddress();
   const chain = useChainId();
   const disabled = address !== undefined ? false : true;
   const [, switchNetwork] = useNetwork();
-  const handleClick = async (listingId: string, quantityDesired = 1) => {
+  const handleClick = async (
+    listingId: string,
+    volume: number,
+    quantityDesired = 1
+  ) => {
+    // Ensure user is on the correct network
     try {
       chain === 80001
         ? await marketplace?.buyoutListing(listingId, quantityDesired)
         : switchNetwork?.(ChainId.Mumbai);
       setListings(undefined);
+      await sale(volume);
     } catch (e) {
       if (e instanceof Error) {
         console.log(e.message);
@@ -109,7 +131,12 @@ const Collection: NextPage<CollectionPageProps> = ({ collections }) => {
                 return (
                   <CardNFT
                     listing={listing}
-                    onClick={() => handleClick(listing.asset.id)}
+                    onClick={() =>
+                      handleClick(
+                        listing.id,
+                        Number(listing.buyoutCurrencyValuePerToken.displayValue)
+                      )
+                    }
                     disabled={disabled}
                   />
                 );
