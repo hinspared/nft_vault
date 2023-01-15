@@ -61,7 +61,7 @@ const Searchbar: React.FC<SearchBarProps> = ({
         <AiOutlineSearch className="text-lg font-bold text-gray-500" />
         <input
           type="search"
-          className="h-10 w-full border-0 border-transparent px-2 pl-1 pl-0 text-slate-900 outline-0 placeholder:text-[#8a939b]"
+          className="h-10 w-full border-0 border-transparent px-2 pl-1 pl-0 text-slate-900 outline-0 placeholder:text-[#8a939b] focus:outline-0"
           placeholder="Search collections"
           onChange={handleChange}
           onFocus={() => setResultOpen(true)}
