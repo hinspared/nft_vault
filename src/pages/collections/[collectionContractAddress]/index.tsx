@@ -1,6 +1,6 @@
 import React from "react";
 import { useRouter } from "next/router";
-import { type Collection } from "@prisma/client";
+import { Prisma, type Collection } from "@prisma/client";
 import {
   type AuctionListing,
   type DirectListing,
@@ -18,6 +18,7 @@ import {
   useChainId,
 } from "@thirdweb-dev/react";
 import LoadingSkeleton from "../../../components/collectionPage/LoadingSkeleton";
+import { type Decimal } from "@prisma/client/runtime";
 
 interface CollectionPageProps {
   collections: Collection[];
@@ -34,16 +35,6 @@ const Collection: NextPage<CollectionPageProps> = ({ collections }) => {
       ? collectionContractAddress
       : "wrong";
   const [isLoading, setLoading] = React.useState(true);
-  const sale = async (volume: number) => {
-    const data = {
-      id: collectionContractAddress,
-      volume: volume,
-    };
-    await fetch("/api/sale", {
-      method: "put",
-      body: JSON.stringify(data),
-    });
-  };
 
   // get All listings of the collection
   const [listings, setListings] =
@@ -95,13 +86,25 @@ const Collection: NextPage<CollectionPageProps> = ({ collections }) => {
   }, [collectionContractAddress, listings, marketplace, nftCollection]);
 
   // Buying NFT functionality
+  const sale = async (volume: Decimal) => {
+    await fetch(`/api/collections/${collectionAddress}`, {
+      method: "put",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        volume,
+      }),
+    });
+  };
+
   const address = useAddress();
   const chain = useChainId();
   const disabled = address !== undefined ? false : true;
   const [, switchNetwork] = useNetwork();
   const handleClick = async (
     listingId: string,
-    volume: number,
+    volume: Decimal,
     quantityDesired = 1
   ) => {
     // Ensure user is on the correct network
@@ -113,7 +116,7 @@ const Collection: NextPage<CollectionPageProps> = ({ collections }) => {
       await sale(volume);
     } catch (e) {
       if (e instanceof Error) {
-        console.log(e.message);
+        alert(e.message);
       }
     }
   };
@@ -128,15 +131,13 @@ const Collection: NextPage<CollectionPageProps> = ({ collections }) => {
           <div className="flex flex-wrap justify-center gap-10">
             {React.Children.toArray(
               listings?.map((listing) => {
+                const volume = new Prisma.Decimal(
+                  listing.buyoutCurrencyValuePerToken.displayValue
+                );
                 return (
                   <CardNFT
                     listing={listing}
-                    onClick={() =>
-                      handleClick(
-                        listing.id,
-                        Number(listing.buyoutCurrencyValuePerToken.displayValue)
-                      )
-                    }
+                    onClick={() => handleClick(listing.id, volume)}
                     disabled={disabled}
                   />
                 );
