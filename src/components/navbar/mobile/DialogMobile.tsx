@@ -48,7 +48,7 @@ const DialogMobile: React.FC<DialogProps> = ({
                 <Link
                   href={`/${navigation}`}
                   onClick={onClick}
-                  className="focus:outline-0"
+                  className="outline-none"
                 >
                   <div className="flex items-center gap-3">
                     <StatIcon navigation={navigation} />
