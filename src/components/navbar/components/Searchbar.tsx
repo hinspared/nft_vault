@@ -5,10 +5,7 @@ import useOutsideClick from "../../../utils/hooks/clickoutsideComponent";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import useSWR from "swr";
 import { type Collection } from "@prisma/client";
-
-const escapeRegExp = (str: string) => {
-  return str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-};
+import { escapeRegExp } from "../../../utils/helpers/escapeRegExp";
 
 interface SearchBarProps {
   mobile?: boolean;

@@ -30,3 +30,7 @@ jobs:
         run: npm run lint
         env:
           DATABASE_URL: ${{secrets.DATABASE_URL}}
+      - name: Testing
+        run: npm run test
+        env:
+          DATABASE_URL: ${{secrets.DATABASE_URL}}
