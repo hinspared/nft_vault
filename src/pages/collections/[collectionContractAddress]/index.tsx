@@ -45,7 +45,7 @@ const Collection: NextPage<CollectionPageProps> = ({ collections }) => {
     "nft-collection"
   );
   const { contract: marketplace } = useContract(
-    "0xee0a43f14299e356d8912373eF3491Ce164f39a9",
+    "0x5cB3587A1066E63e1F1f95e31dAB06b4c24AA2A2",
     "marketplace"
   );
 
@@ -114,6 +114,7 @@ const Collection: NextPage<CollectionPageProps> = ({ collections }) => {
         : switchNetwork?.(ChainId.Mumbai);
       setListings(undefined);
       await sale(volume);
+      alert("NFT was successfully bought");
     } catch (e) {
       if (e instanceof Error) {
         alert(e.message);
