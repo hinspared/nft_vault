@@ -4,7 +4,7 @@ This is a decentralized marketplace for buying and selling non-fungible tokens (
 
 ## Features
 
-- Users can view a collections of NFTs available for sale
+- Users can view collections of NFTs available for sale
 - Users can purchase NFTs using Matic
 
 ## Stack
