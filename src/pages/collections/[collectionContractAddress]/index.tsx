@@ -1,11 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { Prisma, type Collection } from "@prisma/client";
-import {
-  type AuctionListing,
-  type DirectListing,
-  type NFT,
-} from "@thirdweb-dev/sdk";
+import { type AuctionListing, type DirectListing } from "@thirdweb-dev/sdk";
 import { type NextPage } from "next";
 import { prisma } from "../../../server/db/client";
 import CollectionPage from "../../../components/collectionPage/CollectionPage";
@@ -40,10 +36,6 @@ const Collection: NextPage<CollectionPageProps> = ({ collections }) => {
   const [listings, setListings] =
     React.useState<(AuctionListing | DirectListing)[]>();
 
-  const { contract: nftCollection } = useContract(
-    collectionAddress,
-    "nft-collection"
-  );
   const { contract: marketplace } = useContract(
     "0x5cB3587A1066E63e1F1f95e31dAB06b4c24AA2A2",
     "marketplace"
@@ -64,13 +56,11 @@ const Collection: NextPage<CollectionPageProps> = ({ collections }) => {
 
   React.useMemo(() => {
     const activeListings = async () => {
-      const listings = await marketplace?.getAllListings();
       const activeListings = await marketplace?.getActiveListings();
-      const nfts = await nftCollection?.getAll();
-      const names = nfts?.map((nft: NFT) => nft.metadata.name);
-      const listingsOfCollection = activeListings?.filter((listing) =>
-        names?.includes(listing.asset.name)
-      );
+      const listingsOfCollection = activeListings?.filter((listing) => {
+        const name = listing.asset.name as string;
+        return collection?.nfts.includes(name);
+      });
       setListings(listingsOfCollection);
       if (listings !== undefined)
         return sessionStorage.setItem(
@@ -83,7 +73,7 @@ const Collection: NextPage<CollectionPageProps> = ({ collections }) => {
     } else {
       activeListings();
     }
-  }, [collectionContractAddress, listings, marketplace, nftCollection]);
+  }, [collection, collectionContractAddress, listings, marketplace]);
 
   // Buying NFT functionality
   const sale = async (volume: Decimal) => {

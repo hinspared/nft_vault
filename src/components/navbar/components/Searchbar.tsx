@@ -23,6 +23,7 @@ const Searchbar: React.FC<SearchBarProps> = ({
   const [resultOpen, setResultOpen] = React.useState(false);
   const handleCloseResult = () => {
     setResultOpen(false);
+    setSearchInput("");
   };
   const ref = useOutsideClick(handleCloseResult);
 
@@ -62,6 +63,7 @@ const Searchbar: React.FC<SearchBarProps> = ({
           placeholder="Search collections"
           onChange={handleChange}
           onFocus={() => setResultOpen(true)}
+          value={searchInput}
         />
       </div>
 

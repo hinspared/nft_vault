@@ -24,4 +24,5 @@ model Collection {
   bannerImage     String   @unique
   createdAt       DateTime @default(now())
   sales           Int
+  nfts            String[]
 }

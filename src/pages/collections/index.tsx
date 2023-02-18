@@ -30,6 +30,7 @@ const CollectionsPage: NextPage<CollectionsPageProps> = ({ collections }) => {
                 bannerImage={collection.bannerImage}
                 createdAt={collection.createdAt}
                 sales={collection.sales}
+                nfts={collection.nfts}
               />
             </Link>
           ))
