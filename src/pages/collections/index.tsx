@@ -1,7 +1,6 @@
 import React from "react";
 import { type Collection } from "@prisma/client";
 import { type NextPage } from "next";
-import { prisma } from "../../server/db/client";
 import CollectionCard from "../../components/collectionPage/CollectionCard";
 import Link from "next/link";
 import fetchCollections from "../../utils/helpers/fetchCollections";
@@ -11,9 +10,7 @@ interface CollectionsPageProps {
   collections: Collection[];
 }
 const CollectionsPage: NextPage<CollectionsPageProps> = () => {
-  const { data: collections } = useQuery("collections", fetchCollections, {
-    initialData: [],
-  });
+  const { data: collections } = useQuery("collections", fetchCollections);
   return (
     <>
       <div className="mx-10 my-20 flex ">
@@ -44,14 +41,5 @@ const CollectionsPage: NextPage<CollectionsPageProps> = () => {
     </>
   );
 };
-
-// export async function getServerSideProps() {
-//   const collections = await prisma.collection.findMany();
-//   return {
-//     props: {
-//       collections: JSON.parse(JSON.stringify(collections)),
-//     },
-//   };
-// }
 
 export default CollectionsPage;

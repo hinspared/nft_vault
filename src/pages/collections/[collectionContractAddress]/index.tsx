@@ -2,7 +2,6 @@ import React from "react";
 import { useRouter } from "next/router";
 import { Prisma, type Collection } from "@prisma/client";
 import { type NextPage } from "next";
-import { prisma } from "../../../server/db/client";
 import CollectionPage from "../../../components/collectionPage/CollectionPage";
 import CardNFT from "../../../components/collectionPage/CardNFT";
 import {
@@ -15,16 +14,20 @@ import {
 } from "@thirdweb-dev/react";
 import LoadingSkeleton from "../../../components/collectionPage/LoadingSkeleton";
 import { type Decimal } from "@prisma/client/runtime";
+import { useQuery } from "react-query";
+import fetchCollections from "../../../utils/helpers/fetchCollections";
 
 interface CollectionPageProps {
   collections: Collection[];
 }
 
-const Collection: NextPage<CollectionPageProps> = ({ collections }) => {
+const Collection: NextPage<CollectionPageProps> = () => {
   const router = useRouter();
   const { collectionContractAddress } = router.query;
+  const { data: collections } = useQuery("collections", fetchCollections);
   const collection = collections.find(
-    (collection) => collection.contractAddress === collectionContractAddress
+    (collection: Collection) =>
+      collection.contractAddress === collectionContractAddress
   );
   const collectionAddress =
     typeof collectionContractAddress === "string"
@@ -109,12 +112,3 @@ const Collection: NextPage<CollectionPageProps> = ({ collections }) => {
 };
 
 export default Collection;
-
-export const getServerSideProps = async () => {
-  const collections = await prisma.collection.findMany();
-  return {
-    props: {
-      collections: JSON.parse(JSON.stringify(collections)),
-    },
-  };
-};
