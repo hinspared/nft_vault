@@ -7,6 +7,9 @@ import Navbar from "../components/navbar/Navbar";
 import { ThirdwebProvider, ChainId } from "@thirdweb-dev/react";
 import { Poppins } from "@next/font/google";
 import NProgress from "nprogress";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+const queryClient = new QueryClient();
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -24,10 +27,12 @@ const MyApp: AppType = ({ Component, pageProps }) => {
   }, [router.events]);
   return (
     <ThirdwebProvider desiredChainId={ChainId.Mumbai}>
-      <main className={poppins.className}>
-        <Navbar />
-        <Component {...pageProps} />
-      </main>
+      <QueryClientProvider client={queryClient}>
+        <main className={poppins.className}>
+          <Navbar />
+          <Component {...pageProps} />
+        </main>
+      </QueryClientProvider>
     </ThirdwebProvider>
   );
 };

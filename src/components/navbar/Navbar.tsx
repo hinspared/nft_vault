@@ -2,23 +2,38 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import logo from "../../../public/opensealogo.png";
-import { AiOutlineClose, AiOutlineMenu, AiOutlineSearch } from "react-icons/ai";
+import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import Searchbar from "./components/Searchbar";
 import NavigationComponent from "./components/NavigationComponent";
 import DialogMobile from "./mobile/DialogMobile";
+import WarningComponent from "./components/WarningComponent";
+import MobileSearchbar from "./mobile/MobileSearchbar";
+import { useQuery } from "react-query";
+import fetchCollections from "../../utils/helpers/fetchCollections";
 
 const textStyle = `text-sm lg:text-2xl font-semibold text-slate-900 hover:text-gray-300 cursor-pointer`;
+const navigationLinks = ["collections", "stats"];
 
-const navigations = ["collections", "stats"];
-
-const Navbar = () => {
-  const [media, setMedia] = React.useState(true);
+const Navbar: React.FC = () => {
+  const [isMobile, setMobile] = React.useState(false);
+  const { data: collections } = useQuery("collections", fetchCollections, {
+    initialData: [],
+  });
 
   React.useEffect(() => {
-    const match = window.matchMedia("(min-width: 768px)").matches;
-    setMedia(match);
+    const handleScreenSize = () => {
+      setMobile(window.matchMedia("(max-width: 768px)").matches);
+    };
+
+    window.addEventListener("resize", handleScreenSize);
+
+    handleScreenSize();
+    return () => {
+      window.removeEventListener("resize", handleScreenSize);
+    };
   }, []);
 
+  // open/close the wallet component of desktop searchbar
   const [open, setOpen] = React.useState(false);
   const handleClick = () => {
     setOpen((current) => !current);
@@ -27,39 +42,31 @@ const Navbar = () => {
     setOpen(false);
   };
 
-  // Warning to connect Metamask and connect to Mumbai network
-  const [close, setClose] = React.useState(false);
-  const handleClickClose = () => {
-    setClose(true);
-    sessionStorage.setItem("close", "true");
-  };
-  React.useEffect(() => {
-    if (sessionStorage.getItem("close")) setClose(true);
-  }, []);
-
-  // Mobile version
-  const [openSearchBarM, setOpenSearchBarM] = React.useState(false);
-  const handleClickMobile = () => {
-    setOpenSearchBarM(true);
-  };
-  const handleMobileClose = () => {
-    setOpenSearchBarM(false);
-  };
+  // mobile menu
   const [menuOpen, setMenuOpen] = React.useState(false);
   const handleClickMenu = () => {
     setMenuOpen((current) => !current);
   };
 
-  const Menu = () =>
+  const MobileMenuIcon = () =>
     menuOpen ? (
       <AiOutlineClose className="text-2xl" onClick={handleClickMenu} />
     ) : (
       <AiOutlineMenu className="text-2xl" onClick={handleClickMenu} />
     );
 
+  // warning to connect Metamask wallet and connect to Mumbai network
+  const [isWarningClosed, setWarningClosed] = React.useState(false);
+  const handleClickClose = () => {
+    setWarningClosed(true);
+    sessionStorage.setItem("close", "true");
+  };
+  React.useEffect(() => {
+    if (sessionStorage.getItem("close")) setWarningClosed(true);
+  }, []);
+
   return (
     <div className="sticky top-0 z-10">
-      <Searchbar mobile open={openSearchBarM} onClick={handleMobileClose} />
       <div className="relative flex w-full items-center gap-2 bg-white py-2 px-5 shadow-lg">
         <Link href="/">
           <div className="flex cursor-pointer items-center gap-5">
@@ -67,50 +74,32 @@ const Navbar = () => {
             <p className={textStyle}>OpenSea</p>
           </div>
         </Link>
-        {media === false ? (
+        {isMobile ? (
           <>
-            <AiOutlineSearch
-              className="ml-auto text-2xl"
-              onClick={handleClickMobile}
-            />
-            <Menu />
+            <MobileSearchbar collections={collections} />
+            <MobileMenuIcon />
             <DialogMobile
               open={menuOpen}
-              onClick={handleClickMenu}
               onClose={handleClickMenu}
-              navigations={navigations}
+              navigations={navigationLinks}
             />
           </>
         ) : (
           <>
-            <Searchbar />
+            <Searchbar collections={collections} />
             <NavigationComponent
               open={open}
               onClick={handleClick}
               onClose={handleClose}
-              navigations={navigations}
+              navigations={navigationLinks}
             />
           </>
         )}
       </div>
-      <div
-        className={`${
-          close ? "hidden" : null
-        } flex w-full items-center justify-center bg-amber-400 p-1`}
-      >
-        <p className="font-slate-700 ml-auto text-sm">
-          Please connect your wallet and use{" "}
-          <a
-            href="https://medium.com/stakingbits/how-to-connect-polygon-mumbai-testnet-to-metamask-fc3487a3871f#:~:text=Connect%20Metamask%20to%20Polygon%20Testnet,the%20Mumbai%20Testnet%20in%20Metamask."
-            className="underline decoration-solid hover:text-sky-900"
-            target="_blank"
-            rel="noreferrer"
-          >
-            the test network (Mumbai)
-          </a>
-        </p>
-        <AiOutlineClose className="ml-auto" onClick={handleClickClose} />
-      </div>
+      <WarningComponent
+        isWarningClosed={isWarningClosed}
+        onClick={handleClickClose}
+      />
     </div>
   );
 };

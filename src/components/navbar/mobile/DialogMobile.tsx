@@ -8,7 +8,6 @@ import { IoStatsChart } from "react-icons/io5";
 interface DialogProps {
   open: boolean;
   onClose: () => void;
-  onClick: () => void;
   navigations: string[];
 }
 
@@ -22,7 +21,6 @@ const StatIcon: React.FC<{ navigation: string }> = ({ navigation }) =>
 const DialogMobile: React.FC<DialogProps> = ({
   open,
   onClose,
-  onClick,
   navigations,
 }) => {
   return (
@@ -47,7 +45,7 @@ const DialogMobile: React.FC<DialogProps> = ({
               navigations.map((navigation) => (
                 <Link
                   href={`/${navigation}`}
-                  onClick={onClick}
+                  onClick={onClose}
                   className="outline-none"
                 >
                   <div className="flex items-center gap-3">
