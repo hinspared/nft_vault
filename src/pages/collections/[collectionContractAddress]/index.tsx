@@ -11,17 +11,15 @@ import {
   useAddress,
   useChainId,
   useActiveListings,
+  useMetamask,
 } from "@thirdweb-dev/react";
 import LoadingSkeleton from "../../../components/collectionPage/LoadingSkeleton";
 import { type Decimal } from "@prisma/client/runtime";
 import { useQuery } from "react-query";
 import fetchCollections from "../../../utils/helpers/fetchCollections";
+import Head from "next/head";
 
-interface CollectionPageProps {
-  collections: Collection[];
-}
-
-const Collection: NextPage<CollectionPageProps> = () => {
+const Collection: NextPage = () => {
   const router = useRouter();
   const { collectionContractAddress } = router.query;
   const { data: collections } = useQuery("collections", fetchCollections);
@@ -61,6 +59,8 @@ const Collection: NextPage<CollectionPageProps> = () => {
 
   const address = useAddress();
   const chain = useChainId();
+  const connectWithMetamask = useMetamask();
+
   const disabled = address !== undefined ? false : true;
   const [, switchNetwork] = useNetwork();
   const handleClick = async (
@@ -84,6 +84,11 @@ const Collection: NextPage<CollectionPageProps> = () => {
 
   return (
     <>
+      <Head>
+        <title>{collection?.title}</title>
+        <meta name="description" content="NFT collection" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       {isLoading ? (
         <LoadingSkeleton />
       ) : (
@@ -98,7 +103,11 @@ const Collection: NextPage<CollectionPageProps> = () => {
                 return (
                   <CardNFT
                     listing={listing}
-                    onClick={() => handleClick(listing.id, volume)}
+                    onClick={
+                      disabled
+                        ? () => connectWithMetamask()
+                        : () => handleClick(listing.id, volume)
+                    }
                     disabled={disabled}
                   />
                 );

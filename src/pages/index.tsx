@@ -6,8 +6,8 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>NFT marketplace</title>
-        <meta name="description" content="marketplace for NFTs" />
+        <title>NFT vault</title>
+        <meta name="description" content="NFT marketplace" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <MainPageComponent />

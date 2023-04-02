@@ -5,18 +5,20 @@ import CollectionCard from "../../components/collectionPage/CollectionCard";
 import Link from "next/link";
 import fetchCollections from "../../utils/helpers/fetchCollections";
 import { useQuery } from "react-query";
+import Head from "next/head";
 
-interface CollectionsPageProps {
-  collections: Collection[];
-}
-const CollectionsPage: NextPage<CollectionsPageProps> = () => {
+const CollectionsPage: NextPage = () => {
   const { data: collections } = useQuery("collections", fetchCollections);
   return (
     <>
+      <Head>
+        <title>NFT collections</title>
+        <meta name="description" content="NFT collections" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <div className="mx-10 my-20 flex ">
         <p className="text-4xl font-bold text-slate-900">Explore collections</p>
       </div>
-
       <div className="my-5 flex flex-wrap justify-center gap-10 px-10">
         {React.Children.toArray(
           collections.map((collection: Collection) => (

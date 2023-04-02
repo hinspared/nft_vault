@@ -12,10 +12,6 @@ interface CardNFTProps {
 const CardNFT: React.FC<CardNFTProps> = ({ listing, onClick, disabled }) => {
   const asset = listing?.asset;
   const src = typeof asset?.image === "string" ? asset?.image : "";
-  const buttonStyle = `flex w-full items-center justify-center rounded-b-lg ${
-    disabled ? "bg-slate-500" : "bg-sky-600 cursor-pointer"
-  }`;
-  const lightningStyle = `text-gray-50 ${disabled ? "hidden" : ""}`;
 
   return (
     <div className="my-5 flex h-72 w-52 flex-col rounded-lg shadow-lg md:h-96 md:w-72">
@@ -37,10 +33,17 @@ const CardNFT: React.FC<CardNFTProps> = ({ listing, onClick, disabled }) => {
           {listing?.buyoutCurrencyValuePerToken.symbol}
         </p>
       </div>
-      <div className={buttonStyle} onClick={onClick}>
-        <BsLightningChargeFill className={lightningStyle} />
-        <button className="p-2 text-gray-50" disabled={disabled}>
-          Buy now
+      <div
+        className={`flex w-full items-center justify-center rounded-b-lg ${
+          disabled ? "bg-slate-500" : "cursor-pointer bg-sky-600"
+        }`}
+        onClick={onClick}
+      >
+        <BsLightningChargeFill
+          className={`text-gray-50 ${disabled ? "hidden" : ""}`}
+        />
+        <button className="p-2 text-gray-50">
+          {disabled ? "Connect wallet" : "Buy now"}
         </button>
       </div>
     </div>

@@ -1,17 +1,17 @@
 import { type NextPage } from "next";
 import React from "react";
-import { prisma } from "../../server/db/client";
-import { type Collection } from "@prisma/client";
 import sortBy from "../../utils/helpers/sortCollections";
 import StatsTable from "../../components/StatsTable";
-
-interface StatsProps {
-  collections: Collection[];
-}
+import fetchCollections from "../../utils/helpers/fetchCollections";
+import { useQuery } from "react-query";
+import Head from "next/head";
 
 const stats = ["VOLUME", "FLOOR PRICE", "SALES"];
 
-const Stats: NextPage<StatsProps> = ({ collections }) => {
+const Stats: NextPage = () => {
+  const { data: collections } = useQuery("collections", fetchCollections, {
+    initialData: [],
+  });
   const [sorted, setSorted] = React.useState(collections);
   const [active, setActive] = React.useState("");
 
@@ -39,17 +39,24 @@ const Stats: NextPage<StatsProps> = ({ collections }) => {
     }
   };
   return (
-    <StatsTable collections={sorted} active={active} onClick={handleClick} />
+    <>
+      <Head>
+        <title>NFT stats</title>
+        <meta name="description" content="NFT stats" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <StatsTable collections={sorted} active={active} onClick={handleClick} />
+    </>
   );
 };
 
-export const getServerSideProps = async () => {
-  const collections = await prisma.collection.findMany();
-  return {
-    props: {
-      collections: JSON.parse(JSON.stringify(collections)),
-    },
-  };
-};
-
 export default Stats;
+
+// export const getServerSideProps = async () => {
+//   const collections = await prisma.collection.findMany();
+//   return {
+//     props: {
+//       collections: JSON.parse(JSON.stringify(collections)),
+//     },
+//   };
+// };

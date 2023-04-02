@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import logo from "../../../public/opensealogo.png";
+import logo from "../../../public/logo.webp";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import Searchbar from "./components/Searchbar";
 import NavigationComponent from "./components/NavigationComponent";
@@ -71,7 +71,7 @@ const Navbar: React.FC = () => {
         <Link href="/">
           <div className="flex cursor-pointer items-center gap-5">
             <Image src={logo} alt="logo" width={40} height={40} />
-            <p className={textStyle}>OpenSea</p>
+            <p className={textStyle}>NFT vault</p>
           </div>
         </Link>
         {isMobile ? (
