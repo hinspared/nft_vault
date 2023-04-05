@@ -12,7 +12,7 @@ This is a decentralized marketplace for buying and selling non-fungible tokens (
 - [NextJS](https://nextjs.org)
 - [Prisma](https://prisma.io)
 - [TailwindCSS](https://tailwindcss.com)
-- [Thirdweb](https://thirdweb.com)
+- [Thirdweb SDK](https://thirdweb.com)
 
 ## Getting started
 
