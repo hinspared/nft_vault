@@ -1,4 +1,4 @@
-# NFT_marketplace
+# NFT vault
 
 This is a decentralized marketplace for buying and selling non-fungible tokens (NFTs) built on the Mumbai blockchain(testnet).
 
