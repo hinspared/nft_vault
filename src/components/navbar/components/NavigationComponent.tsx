@@ -1,8 +1,9 @@
 import Link from "next/link";
 import React from "react";
 import { IoMdWallet } from "react-icons/io";
-import { ConnectWallet } from "@thirdweb-dev/react";
+import { ConnectWallet, useAccount } from "@thirdweb-dev/react";
 import useOutsideClick from "../../../utils/hooks/clickoutsideComponent";
+import { toast } from "react-hot-toast";
 
 interface NavigationProps {
   open: boolean;
@@ -19,6 +20,16 @@ const NavigationComponent: React.FC<NavigationProps> = ({
   navigations,
 }) => {
   const ref = useOutsideClick(onClose);
+  const account = useAccount();
+
+  React.useEffect(() => {
+    if (!account[0].data) sessionStorage.removeItem("wallet");
+    if (sessionStorage.getItem("wallet")) return;
+    if (account[0].data) {
+      toast.success("Welcome");
+      sessionStorage.setItem("wallet", "connected");
+    }
+  }, [account]);
 
   return (
     <div className="z-30 flex items-center gap-4">

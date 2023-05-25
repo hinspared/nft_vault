@@ -18,6 +18,7 @@ import { type Decimal } from "@prisma/client/runtime";
 import { useQuery } from "react-query";
 import fetchCollections from "../../../utils/helpers/fetchCollections";
 import Head from "next/head";
+import { toast } from "react-hot-toast";
 
 const Collection: NextPage = () => {
   const router = useRouter();
@@ -74,10 +75,13 @@ const Collection: NextPage = () => {
         ? await marketplace?.buyoutListing(listingId, quantityDesired)
         : switchNetwork?.(ChainId.Mumbai);
       await sale(volume);
-      alert("NFT was successfully bought");
+      toast.success("NFT was successfully bought");
     } catch (e) {
       if (e instanceof Error) {
-        alert(e.message);
+        if (e.message.includes("user rejected transaction"))
+          toast.error("user rejected transaction");
+        if (e.message.includes("insufficient funds"))
+          toast.error("insufficient funds");
       }
     }
   };

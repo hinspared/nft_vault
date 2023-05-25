@@ -8,6 +8,8 @@ import { ThirdwebProvider, ChainId } from "@thirdweb-dev/react";
 import { Poppins } from "@next/font/google";
 import NProgress from "nprogress";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { Toaster } from "react-hot-toast";
+import React from "react";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +32,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
       <QueryClientProvider client={queryClient}>
         <main className={poppins.className}>
           <Navbar />
+          <Toaster />
           <Component {...pageProps} />
         </main>
       </QueryClientProvider>
