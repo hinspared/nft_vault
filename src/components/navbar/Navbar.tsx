@@ -10,29 +10,17 @@ import WarningComponent from "./components/WarningComponent";
 import MobileSearchbar from "./mobile/MobileSearchbar";
 import { useQuery } from "react-query";
 import fetchCollections from "../../utils/helpers/fetchCollections";
+import useMobile from "../../utils/hooks/useMobile";
 
 const textStyle = `text-sm lg:text-2xl font-semibold text-slate-900 hover:text-gray-300 cursor-pointer`;
 const navigationLinks = ["collections", "stats"];
 
 const Navbar: React.FC = () => {
-  const [isMobile, setMobile] = React.useState(false);
+  const isMobile = useMobile();
   const { data: collections, isLoading } = useQuery(
     "collections",
     fetchCollections
   );
-
-  React.useEffect(() => {
-    const handleScreenSize = () => {
-      setMobile(window.matchMedia("(max-width: 768px)").matches);
-    };
-
-    window.addEventListener("resize", handleScreenSize);
-
-    handleScreenSize();
-    return () => {
-      window.removeEventListener("resize", handleScreenSize);
-    };
-  }, []);
 
   // open/close the wallet component of desktop searchbar
   const [open, setOpen] = React.useState(false);
@@ -77,7 +65,7 @@ const Navbar: React.FC = () => {
         </Link>
         {isMobile ? (
           <>
-            <MobileSearchbar collections={collections} />
+            <MobileSearchbar collections={isLoading ? [] : collections} />
             <MobileMenuIcon />
             <DialogMobile
               open={menuOpen}

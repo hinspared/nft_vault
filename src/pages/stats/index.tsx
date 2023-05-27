@@ -9,10 +9,14 @@ import Head from "next/head";
 const stats = ["VOLUME", "FLOOR PRICE", "SALES"];
 
 const Stats: NextPage = () => {
-  const { data: collections } = useQuery("collections", fetchCollections, {
-    initialData: [],
-  });
-  const [sorted, setSorted] = React.useState(collections);
+  const { data: collections, isLoading } = useQuery(
+    "collections",
+    fetchCollections,
+    {
+      initialData: [],
+    }
+  );
+  const [sorted, setSorted] = React.useState(isLoading ? [] : collections);
   const [active, setActive] = React.useState("");
 
   const handleClick = (e: React.MouseEvent) => {
@@ -51,12 +55,3 @@ const Stats: NextPage = () => {
 };
 
 export default Stats;
-
-// export const getServerSideProps = async () => {
-//   const collections = await prisma.collection.findMany();
-//   return {
-//     props: {
-//       collections: JSON.parse(JSON.stringify(collections)),
-//     },
-//   };
-// };

@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function useOutsideClick(callback: () => void) {
+export default function useClickOutside(callback: () => void) {
   const ref = React.useRef() as React.MutableRefObject<HTMLDivElement>;
 
   React.useEffect(() => {

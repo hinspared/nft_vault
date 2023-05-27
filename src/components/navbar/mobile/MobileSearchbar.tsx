@@ -4,7 +4,8 @@ import React from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { escapeRegExp } from "../../../utils/helpers/escapeRegExp";
-import useOutsideClick from "../../../utils/hooks/clickoutsideComponent";
+import useClickOutside from "../../../utils/hooks/useClickOutside";
+import Image from "next/image";
 
 const MobileSearchbar: React.FC<{ collections: Collection[] }> = ({
   collections,
@@ -32,7 +33,7 @@ const MobileSearchbar: React.FC<{ collections: Collection[] }> = ({
     setSearchInput(e.target.value);
     if (collections.length > 0) setResultOpen(true);
   };
-  const ref = useOutsideClick(handleCloseResult);
+  const ref = useClickOutside(handleCloseResult);
 
   const handleClick = () => {
     setOpen(true);
@@ -70,9 +71,16 @@ const MobileSearchbar: React.FC<{ collections: Collection[] }> = ({
             foundCollections.map((collection) => (
               <Link
                 href={`/collections/${collection.contractAddress}`}
-                className="py-2 pl-10 [&:not(:last-child)]:border-b-2 [&:not(:last-child)]:border-slate-500"
+                className="flex items-center gap-3 py-2 pl-5 [&:not(:last-child)]:border-b-2 [&:not(:last-child)]:border-slate-500"
                 onClick={handleClose}
               >
+                <Image
+                  src={collection.profileImage}
+                  alt={collection.title}
+                  width={30}
+                  height={30}
+                  className="rounded-xl"
+                />
                 <p className="">{collection.title}</p>
               </Link>
             ))

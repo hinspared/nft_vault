@@ -2,7 +2,7 @@ import Link from "next/link";
 import React from "react";
 import { IoMdWallet } from "react-icons/io";
 import { ConnectWallet, useAccount } from "@thirdweb-dev/react";
-import useOutsideClick from "../../../utils/hooks/clickoutsideComponent";
+import useClickOutside from "../../../utils/hooks/useClickOutside";
 import { toast } from "react-hot-toast";
 
 interface NavigationProps {
@@ -19,7 +19,7 @@ const NavigationComponent: React.FC<NavigationProps> = ({
   onClose,
   navigations,
 }) => {
-  const ref = useOutsideClick(onClose);
+  const ref = useClickOutside(onClose);
   const account = useAccount();
 
   React.useEffect(() => {

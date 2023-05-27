@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import { AiOutlineSearch } from "react-icons/ai";
-import useOutsideClick from "../../../utils/hooks/clickoutsideComponent";
+import useClickOutside from "../../../utils/hooks/useClickOutside";
 import { type Collection } from "@prisma/client";
 import { escapeRegExp } from "../../../utils/helpers/escapeRegExp";
 import Image from "next/image";
@@ -28,7 +28,7 @@ const Searchbar: React.FC<SearchBarProps> = ({ open = true, collections }) => {
     setResultOpen(false);
     setSearchInput("");
   };
-  const ref = useOutsideClick(handleCloseResult);
+  const ref = useClickOutside(handleCloseResult);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -62,7 +62,7 @@ const Searchbar: React.FC<SearchBarProps> = ({ open = true, collections }) => {
           foundCollections.map((collection) => (
             <Link
               href={`/collections/${collection.contractAddress}`}
-              className="flex gap-3 py-2 pl-10 [&:not(:last-child)]:border-b-2 [&:not(:last-child)]:border-slate-500"
+              className="flex items-center gap-3 py-2 pl-10 [&:not(:last-child)]:border-b-2 [&:not(:last-child)]:border-slate-500"
               onClick={handleCloseResult}
             >
               <Image
