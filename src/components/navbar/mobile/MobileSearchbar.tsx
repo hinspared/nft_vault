@@ -54,7 +54,7 @@ const MobileSearchbar: React.FC<{ collections: Collection[] }> = ({
           <AiOutlineSearch className="text-lg font-bold text-gray-500" />
           <input
             type="search"
-            className="h-10 w-full border-0 border-transparent px-2 pl-1 pl-0 text-slate-900 outline-none placeholder:text-[#8a939b]"
+            className="h-10 w-full border-0 border-transparent px-2 pl-1 text-slate-900 outline-none placeholder:text-[#8a939b]"
             placeholder="Search collections"
             onChange={handleChange}
             value={searchInput}

@@ -2,7 +2,7 @@ import { useAddress, useMetamask } from "@thirdweb-dev/react";
 import Link from "next/link";
 import React from "react";
 
-const MainPageComponent = () => {
+const Hero = () => {
   const connectWithMetamask = useMetamask();
   const address = useAddress();
 
@@ -36,4 +36,4 @@ const MainPageComponent = () => {
   );
 };
 
-export default MainPageComponent;
+export default Hero;

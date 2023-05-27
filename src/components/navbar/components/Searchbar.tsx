@@ -4,6 +4,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 import useOutsideClick from "../../../utils/hooks/clickoutsideComponent";
 import { type Collection } from "@prisma/client";
 import { escapeRegExp } from "../../../utils/helpers/escapeRegExp";
+import Image from "next/image";
 
 interface SearchBarProps {
   open?: boolean;
@@ -45,7 +46,7 @@ const Searchbar: React.FC<SearchBarProps> = ({ open = true, collections }) => {
         <AiOutlineSearch className="text-lg font-bold text-gray-500" />
         <input
           type="search"
-          className="h-10 w-full border-0 border-transparent px-2 pl-1 pl-0 text-slate-900 outline-none placeholder:text-[#8a939b]"
+          className="h-10 w-full border-0 border-transparent px-2 pl-1 text-slate-900 outline-none placeholder:text-[#8a939b]"
           placeholder="Search collections"
           onChange={handleChange}
           value={searchInput}
@@ -61,9 +62,16 @@ const Searchbar: React.FC<SearchBarProps> = ({ open = true, collections }) => {
           foundCollections.map((collection) => (
             <Link
               href={`/collections/${collection.contractAddress}`}
-              className="py-2 pl-10 [&:not(:last-child)]:border-b-2 [&:not(:last-child)]:border-slate-500"
+              className="flex gap-3 py-2 pl-10 [&:not(:last-child)]:border-b-2 [&:not(:last-child)]:border-slate-500"
               onClick={handleCloseResult}
             >
+              <Image
+                src={collection.profileImage}
+                alt={collection.title}
+                width={30}
+                height={30}
+                className="rounded-xl"
+              />
               <p className="">{collection.title}</p>
             </Link>
           ))

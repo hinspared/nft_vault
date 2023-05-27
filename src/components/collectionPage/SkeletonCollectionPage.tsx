@@ -1,6 +1,6 @@
 import React from "react";
 
-const LoadingSkeleton = () => {
+const SkeletonCollectionPage = () => {
   return (
     <>
       <div className="relative -z-10 my-5 h-56 w-full animate-pulse bg-gray-300 md:h-80">
@@ -19,4 +19,4 @@ const LoadingSkeleton = () => {
     </>
   );
 };
-export default LoadingSkeleton;
+export default SkeletonCollectionPage;

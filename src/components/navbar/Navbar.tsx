@@ -16,9 +16,10 @@ const navigationLinks = ["collections", "stats"];
 
 const Navbar: React.FC = () => {
   const [isMobile, setMobile] = React.useState(false);
-  const { data: collections } = useQuery("collections", fetchCollections, {
-    initialData: [],
-  });
+  const { data: collections, isLoading } = useQuery(
+    "collections",
+    fetchCollections
+  );
 
   React.useEffect(() => {
     const handleScreenSize = () => {
@@ -86,7 +87,7 @@ const Navbar: React.FC = () => {
           </>
         ) : (
           <>
-            <Searchbar collections={collections} />
+            <Searchbar collections={isLoading ? [] : collections} />
             <NavigationComponent
               open={open}
               onClick={handleClick}
