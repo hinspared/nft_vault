@@ -1,12 +1,13 @@
 import { type NextPage } from "next";
 import React from "react";
 import sortBy from "../../utils/helpers/sortCollections";
-import StatsTable from "../../components/StatsTable";
+import StatsTable from "../../components/stats/StatsTable";
 import fetchCollections from "../../utils/helpers/fetchCollections";
 import { useQuery } from "react-query";
 import Head from "next/head";
-
-const stats = ["VOLUME", "FLOOR PRICE", "SALES"];
+import TableRow from "../../components/stats/TableRow";
+import { type Collection } from "@prisma/client";
+import SkeletonTable from "../../components/stats/SkeletonTable";
 
 const Stats: NextPage = () => {
   const { data: collections, isLoading } = useQuery(
@@ -16,31 +17,26 @@ const Stats: NextPage = () => {
       initialData: [],
     }
   );
-  const [sorted, setSorted] = React.useState(isLoading ? [] : collections);
+
   const [active, setActive] = React.useState("");
 
-  const handleClick = (e: React.MouseEvent) => {
-    // const target = e.target as HTMLElement;
-    const target = e.currentTarget.querySelector("p");
-    if (target?.innerText === stats[0]) {
-      const volumeUp = sortBy(collections, "volumeTraded", "up");
-      const volumeDown = sortBy(collections, "volumeTraded", "down");
-      active === "VOLUME UP"
-        ? (setSorted(volumeDown), setActive("VOLUME DOWN"))
-        : (setSorted(volumeUp), setActive("VOLUME UP"));
-    } else if (target?.innerText === stats[1]) {
-      const priceUp = sortBy(collections, "floorPrice", "up");
-      const priceDown = sortBy(collections, "floorPrice", "down");
-      active === "FLOOR PRICE UP"
-        ? (setSorted(priceDown), setActive("FLOOR PRICE DOWN"))
-        : (setSorted(priceUp), setActive("FLOOR PRICE UP"));
-    } else if (target?.innerText === stats[2]) {
-      const salesUp = sortBy(collections, "sales", "up");
-      const salesDown = sortBy(collections, "sales", "down");
-      active === "SALES UP"
-        ? (setSorted(salesDown), setActive("SALES DOWN"))
-        : (setSorted(salesUp), setActive("SALES UP"));
+  // sort functionality
+  const [sorted, setSorted] = React.useState<Collection[]>([]);
+
+  React.useEffect(() => {
+    if (!isLoading) {
+      setSorted(collections);
     }
+  }, [collections, isLoading]);
+
+  const handleClick = (e: React.MouseEvent) => {
+    const target = e.currentTarget as Element;
+    const key = target.getAttribute("data-value") as keyof Collection;
+    const up = sortBy(collections, key, "up");
+    const down = sortBy(collections, key, "down");
+    const condition = JSON.stringify(sorted) === JSON.stringify(up);
+    condition ? setSorted(down) : setSorted(up);
+    setActive(key);
   };
   return (
     <>
@@ -49,7 +45,17 @@ const Stats: NextPage = () => {
         <meta name="description" content="NFT stats" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <StatsTable collections={sorted} active={active} onClick={handleClick} />
+      <StatsTable active={active} onClick={handleClick}>
+        {isLoading ? (
+          <SkeletonTable />
+        ) : (
+          React.Children.toArray(
+            sorted.map((collection: Collection, index: number) => (
+              <TableRow collection={collection} index={index} />
+            ))
+          )
+        )}
+      </StatsTable>
     </>
   );
 };
