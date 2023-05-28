@@ -23,9 +23,9 @@ This is a decentralized marketplace for buying and selling non-fungible tokens (
 ## Installation and Setup <a name="installation-and-setup"></a>
 
 1. Clone the repository: git clone [https://github.com/hinspared/nft-vault.git](https://github.com/hinspared/nft_vault.git).
-2. Install dependencies: npm install.
+2. Install dependencies: `npm install`.
 3. Configure the necessary environment variables.
-4. Start the development server: npm run dev.
+4. Start the development server: `npm run dev`.
 
 # Usage <a name="usage"></a>
 
