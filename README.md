@@ -14,6 +14,7 @@ This is a decentralized marketplace for buying and selling non-fungible tokens (
 
 ## Stack
 
+- [Typescript](https://www.typescriptlang.org)
 - [NextJS](https://nextjs.org)
 - [Prisma](https://prisma.io)
 - [TailwindCSS](https://tailwindcss.com)
