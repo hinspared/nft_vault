@@ -8,7 +8,7 @@ This is a decentralized marketplace for buying and selling non-fungible tokens (
 - [Features](#features)
 - [Installation and Setup](#installation-and-setup)
 - [Usage](#usage)
-- [Technologies](#technologies)
+- [Built With](#builtwith)
 - [Deployment](#deployment)
 
 ## Demo <a name="demo"></a>
@@ -37,7 +37,7 @@ Prerequisites:
 2. Browse the available collections of NFTs.
 3. Select an NFT and proceed with the purchase using the Matic.
 
-## Technologies <a name="technologies"></a>
+## Built With <a name="builtwith"></a>
 
 - [Typescript](https://www.typescriptlang.org)
 - [NextJS](https://nextjs.org)
